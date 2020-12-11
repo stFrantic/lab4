@@ -1,1 +1,1 @@
-lab4.Пraph in window app
+lab4.Graph in window app
