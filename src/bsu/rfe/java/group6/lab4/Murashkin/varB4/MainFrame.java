@@ -28,7 +28,7 @@ public class MainFrame extends JFrame {
 
     private JCheckBoxMenuItem showAxisMenuItem;
     private JCheckBoxMenuItem showMarkersMenuItem;
-    private JCheckBoxMenuItem showIntGraphicsMenuItem;
+
     // Компонент-отображатель графика
     private GraphicsDisplay display = new GraphicsDisplay();
     // Флаг, указывающий на загруженность данных графика
@@ -64,29 +64,22 @@ public class MainFrame extends JFrame {
         menuBar.add(graphicsMenu);
         Action showAxisAction = new AbstractAction("Показывать оси координат") {
             public void actionPerformed(ActionEvent event) {
-                // свойство showAxis класса GraphicsDisplay истина, если элемент меню
-                // showAxisMenuItem отмечен флажком, и ложь - в противном случае
                 display.setShowAxis(showAxisMenuItem.isSelected());
             }
         };
 
         showAxisMenuItem = new JCheckBoxMenuItem(showAxisAction);
         graphicsMenu.add(showAxisMenuItem);
-        // Элемент по умолчанию включен (отмечен флажком)
         showAxisMenuItem.setSelected(true);
-        // Повторить действия для элемента "Показывать маркеры точек"
         Action showMarkersAction = new AbstractAction("Показывать маркеры точек") {
             public void actionPerformed(ActionEvent event) {
-                // по аналогии с showAxisMenuItem
                 display.setShowMarkers(showMarkersMenuItem.isSelected());
             }
         };
 
         showMarkersMenuItem = new JCheckBoxMenuItem(showMarkersAction);
         graphicsMenu.add(showMarkersMenuItem);
-        // Элемент по умолчанию включен (отмечен флажком)
         showMarkersMenuItem.setSelected(true);
-        // Зарегистрировать обработчик событий, связанных с меню "График"
         graphicsMenu.addMenuListener(new GraphicsMenuListener());
         getContentPane().add(display, BorderLayout.CENTER);
     }
@@ -109,20 +102,17 @@ public class MainFrame extends JFrame {
                 display.showGraphics(graphicsData);
             }
 
-            // Шаг 5 - Закрыть входной поток
             in.close();
         } catch (FileNotFoundException ex) {
             JOptionPane.showMessageDialog(MainFrame.this,
                     "Указанный файл не найден",
                     "Ошибка загрузки данных",
                     JOptionPane.WARNING_MESSAGE);
-            return;
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(MainFrame.this,
                     "Ошибка чтения координат точек из файла",
                     "Ошибка загрузки данных",
                     JOptionPane.WARNING_MESSAGE);
-            return;
         }
     }
 
@@ -133,22 +123,13 @@ public class MainFrame extends JFrame {
         frame.setVisible(true);
     }
 
-    // Класс-слушатель событий, связанных с отображением меню
+
     private class GraphicsMenuListener implements MenuListener {
-        // Обработчик, вызываемый перед показом меню
         public void menuSelected(MenuEvent e) {
-            // Доступность или недоступность элементов меню "График" определяется загруженностью данных
             showAxisMenuItem.setEnabled(fileLoaded);
             showMarkersMenuItem.setEnabled(fileLoaded);
-            showIntGraphicsMenuItem.setEnabled(fileLoaded);
         }
-
-        // Обработчик, вызываемый после того, как меню исчезло с экрана
-        public void menuDeselected(MenuEvent e) {
-        }
-
-        // Обработчик, вызываемый в случае отмены выбора пункта меню (очень редкая ситуация)
-        public void menuCanceled(MenuEvent e) {
-        }
+        public void menuDeselected(MenuEvent e) {}
+        public void menuCanceled(MenuEvent e) {}
     }
 }
